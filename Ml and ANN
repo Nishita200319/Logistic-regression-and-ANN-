@@ -1,0 +1,175 @@
+
+
+
+
+import pandas as pd
+
+import numpy as np
+
+import matplotlib.pyplot as plt
+
+import seaborn as sns
+
+
+#loading the dataset
+
+heart_data = pd.read_csv('heart.csv')
+
+heart_data
+
+# In[3]:
+
+#EDA part
+
+# In[4]:
+
+heart_data.shape
+
+# In[5]:
+
+heart_data.head()
+
+# In[6]:
+
+heart_data.tail()
+
+# In[7]:
+
+heart_data.describe()
+
+# In[8]:
+
+heart_data.dtypes
+
+# In[9]:
+
+heart_data.isnull().sum()
+
+# In[10]:
+
+#checking correlation 
+
+plt.figure(figsize=(18,10))
+
+sns.heatmap(heart_data.corr(),annot=True)
+
+plt.show()
+
+# In[11]:
+
+from sklearn.model_selection import train_test_split
+
+from sklearn.preprocessing import StandardScaler
+
+from sklearn.linear_model import LogisticRegression
+
+from sklearn.metrics import accuracy_score
+
+# In[12]:
+
+# Separate independent and dependent(target) variable
+
+X = heart_data.drop('target', axis=1)
+
+y = heart_data['target']
+
+# In[13]:
+
+# Split the dataset into train and test sets
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# In[14]:
+
+# Perform feature scaling
+
+scaler = StandardScaler()
+
+X_train = scaler.fit_transform(X_train)
+
+X_test = scaler.transform(X_test)
+
+# In[15]:
+
+# Initialize models
+
+logistic_regression = LogisticRegression()
+
+# In[16]:
+
+# Fit the models
+
+logistic_regression.fit(X_train, y_train)
+
+# In[17]:
+
+# Make predictions
+
+logistic_regression_preds = logistic_regression.predict(X_test)
+
+# In[18]:
+
+# Evaluate the models
+
+logistic_regression_accuracy = accuracy_score(y_test, logistic_regression_preds)
+
+# In[19]:
+
+# Print the accuracies
+
+print("Logistic Regression Accuracy:", logistic_regression_accuracy)
+
+# In[20]:
+
+X
+
+# In[21]:
+
+y
+
+# In[13]:
+
+model = tf.keras.Sequential()
+
+# In[30]:
+
+import keras
+
+from keras.models import Sequential
+
+from keras.layers import Dense
+
+import tensorflow as tf
+
+from keras.layers import Dense, Dropout, Conv2D, MaxPooling2D
+
+from tensorflow.keras import layers
+
+# In[31]:
+
+model = tf.keras.Sequential()
+
+# In[32]:
+
+# Define the ANN model
+
+model.add(layers.Dense(64, activation='relu', input_shape=(X_train.shape[1],)))
+
+model.add(layers.Dense(64, activation='relu'))
+
+model.add(layers.Dense(1, activation='sigmoid'))
+
+# In[33]:
+
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+# In[34]:
+
+model.fit(X_train, y_train, epochs=10, batch_size=32, verbose=1)
+
+# In[35]:
+
+loss, accuracy = model.evaluate(X_test, y_test)
+
+print(f"Test Loss: {loss}, Test Accuracy: {accuracy}")
+
